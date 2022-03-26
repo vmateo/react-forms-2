@@ -21,7 +21,6 @@ const SimpleInput = (props) => {
     setEnteredNameIsTouched(true);
 
     if (!enteredNameIsValid) {
-      setEnteredNameIsValid(false);
       return;
     }
 

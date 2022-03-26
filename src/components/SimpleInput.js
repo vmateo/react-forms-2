@@ -1,13 +1,18 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 const SimpleInput = (props) => {
-  const nameInputRef = useRef(); // Once
   const [enteredName, setEnteredName] = useState("");
-  const [enteredNameIsValid, setEnteredNameIsValid] = useState(false);
   const [enteredNameIsTouched, setEnteredNameIsTouched] = useState(false);
+
+  const enteredNameIsValid = enteredName.trim() !== "";
+  const nameInputIsInvalid = !enteredNameIsValid && enteredNameIsTouched;
 
   const nameInputChangeHandler = (event) => {
     setEnteredName(event.target.value);
+  };
+
+  const nameInputBlurHandler = (event) => {
+    setEnteredNameIsTouched(true);
   };
 
   const formSubmissionHandler = (event) => {
@@ -15,21 +20,16 @@ const SimpleInput = (props) => {
 
     setEnteredNameIsTouched(true);
 
-    if (enteredName.trim() === "") {
+    if (!enteredNameIsValid) {
       setEnteredNameIsValid(false);
       return;
     }
 
-    setEnteredNameIsValid(true);
-
     console.log(enteredName);
-    const enteredValue = nameInputRef.current.value;
-    console.log(enteredValue);
 
     setEnteredName("");
+    setEnteredNameIsTouched(false);
   };
-
-  const nameInputIsInvalid = !enteredNameIsValid && enteredNameIsTouched;
 
   const nameInputClasses = nameInputIsInvalid
     ? "form-control invalid"
@@ -40,10 +40,10 @@ const SimpleInput = (props) => {
       <div className={nameInputClasses}>
         <label htmlFor="name">Your Name</label>
         <input
-          ref={nameInputRef}
           type="text"
           id="name"
           onChange={nameInputChangeHandler}
+          onBlur={nameInputBlurHandler}
           value={enteredName}
         />
         {nameInputIsInvalid && (
